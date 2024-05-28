@@ -15,7 +15,6 @@
     "@xterm/addon-web-links": "^0.11.0",
     "@xterm/xterm": "^5.5.0",
     "ansi-escape-sequences": "^6.2.2",
-    "chalk": "^5.3.0",
     "cli-color": "^2.0.4",
     "esbuild": "^0.21.4",
     "mime-types": "^2.1.35",

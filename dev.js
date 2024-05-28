@@ -5,7 +5,8 @@ import mime from "mime-types";
 await import("./build.js");
 
 const handler = (req, res) => {
-    const path = req.url === "/" ? "/index.html" : req.url;
+    const urlStr = req.url.split("?").shift();
+    const path = urlStr === "/" ? "/index.html" : urlStr;
 
     const filePath = "dist" + path;
     if(fs.existsSync(filePath)){
