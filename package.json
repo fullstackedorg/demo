@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "description": "A webcontainer demo of FullStacked Editor",
   "scripts": {
-    "start": "node dev"
+    "start": "node dev",
+    "deploy": "node build.js --production && npx wrangler pages deploy dist"
   },
   "author": "cplepage",
   "type": "module",

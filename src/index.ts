@@ -21,7 +21,7 @@ fitAddon.fit();
 
 window.addEventListener("resize", () => fitAddon.fit());
 
-term.writeln(`Welcome to the ${clc.cyanBright("FullStacked Editor Demo")}\n\n`);
+term.writeln(`Welcome to the ${clc.cyanBright("FullStacked Editor Demo")}\n`);
 
 term.writeln(`This demo is possible thanks to WebContainers.io (https://webcontainers.io).\n`);
 
@@ -64,7 +64,7 @@ installProcess.output.pipeTo(
 
 await installProcess.exit;
 
-term.writeln(`\n\nLaunching FullStacked Editor`)
+term.writeln(`\n\nLaunching...`)
 
 const runProcess = await webcontainerInstance.spawn("npx", ["fullstacked"]);
 
@@ -79,6 +79,7 @@ runProcess.output.pipeTo(
 webcontainerInstance.on("server-ready", (port, url) => {
     if (port === 9000) {
         const iframe = document.createElement("iframe");
+        iframe.id = "editor";
         document.body.append(iframe);
         iframe.onload = () => {
             term.dispose();

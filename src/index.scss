@@ -9,8 +9,24 @@ html, body, main {
     height: 100%;
 }
 
+html, body {
+    background-color: #1e293b;
+}
+
+main {
+    background-color: black;
+}
+
 iframe {
     border: 0;
     height: 100%;
     width: 100%;
+}
+
+.winbox {
+    background: #007aff!important;
+}
+
+#editor {
+    margin-bottom: -4px;
 }
