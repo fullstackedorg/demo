@@ -1,0 +1,16 @@
+* {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html, body, main {
+    margin: 0;
+    height: 100%;
+}
+
+iframe {
+    border: 0;
+    height: 100%;
+    width: 100%;
+}
