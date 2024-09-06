@@ -45,7 +45,7 @@ webcontainerInstance.mount({
                     "start": "fullstacked"
                 },
                 dependencies: {
-                    "@fullstacked/editor": "0.8.0"
+                    "@fullstacked/editor": "0.8.1"
                 }
             }, null, 2)
         }
