@@ -9,6 +9,9 @@ import clc from "cli-color";
 import ansiEscape from "ansi-escape-sequences";
 import WinBox from "winbox/src/js/winbox";
 
+const searchParams = new URLSearchParams(window.location.search);
+const tag = searchParams.get("tag") || "latest";
+
 const main = document.createElement("main");
 document.body.append(main);
 
@@ -45,7 +48,7 @@ webcontainerInstance.mount({
                     "start": "fullstacked"
                 },
                 dependencies: {
-                    "@fullstacked/editor": "0.8.1"
+                    "@fullstacked/editor": tag
                 }
             }, null, 2)
         }
