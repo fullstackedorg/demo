@@ -8,6 +8,7 @@ const createButtonLink = (text: string, link: string) => {
     a.target = "_blank";
     const button = Button({
         text,
+        iconRight: "External Link"
     });
     a.append(button);
     return a;

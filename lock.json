@@ -3,9 +3,9 @@
         {
             "name": "@fullstacked/ui",
             "version": "0.0.1",
-            "git": "tag",
+            "git": "commit",
             "as": [
-                "github.com:fullstackedorg/ui#0.0.1"
+                "github.com:fullstackedorg/ui#f1f2448ef5822ff7902617f747cadd1d7b6e362a"
             ],
             "location": [
                 "node_modules"
