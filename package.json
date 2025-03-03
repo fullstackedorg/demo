@@ -1,8 +1,7 @@
 {
     "dependencies": {
-        "@types/react": "^18.3.18",
-        "@types/react-dom": "^18.3.5",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1"
+        "@fullstacked/ui": "github.com:fullstackedorg/ui#0.0.1",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0"
     }
 }
