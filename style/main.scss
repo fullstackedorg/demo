@@ -55,8 +55,11 @@ svg {
 }
 
 nav {
-    display: flex;
-    gap: s.$medium;
+    text-align: center;
+    > a {
+        display: inline-block;
+        margin: calc(s.$medium / 2);
+    }
     padding-bottom: s.$medium;
 }
 
