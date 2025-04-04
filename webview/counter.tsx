@@ -44,17 +44,17 @@ function Counter() {
     return (
         <>
             <div>
-                <button onClick={decr}>
+                <button className="icon-large" onClick={decr}>
                     <Icon iconName={"minus"} />
                 </button>
                 <div>
                     {count}
                 </div>
-                <button onClick={incr}>
+                <button className="icon-large" onClick={incr}>
                     <Icon iconName={"plus"} />
                 </button>
             </div>
-            <button onClick={reset}>
+            <button className="icon-large" onClick={reset}>
                 <Icon iconName={"reset"} />
             </button>
         </>

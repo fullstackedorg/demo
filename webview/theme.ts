@@ -1,33 +1,41 @@
+import { InputSwitch } from "@fullstacked/ui";
 import fs from "fs";
 
-const themeSwitch = document.querySelector<HTMLInputElement>(
-    "#theme-switch input"
-);
+const lightClassName = "light";
 
 const themeFile = "data/theme.txt";
 await fs.mkdir("data");
 
 async function loadTheme() {
     if (!(await fs.exists(themeFile))) {
-        return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? "1" : "0";
+        return window.matchMedia?.("(prefers-color-scheme: dark)").matches
+            ? "1"
+            : "0";
     }
 
     return fs.readFile(themeFile, { encoding: "utf8" });
 }
 
-const startDark = !!parseInt(await loadTheme());
-if (startDark) {
-    document.documentElement.classList.add("dark");
-    themeSwitch.checked = false;
+function setDark(dark: boolean) {
+    if (dark) {
+        document.documentElement.classList.remove(lightClassName);
+    } else {
+        document.documentElement.classList.add(lightClassName);
+    }
 }
 
-themeSwitch.addEventListener("change", (e) => {
-    const isDark = !(e.currentTarget as HTMLInputElement).checked;
-    if (isDark) {
-        document.documentElement.classList.add("dark");
-    } else {
-        document.documentElement.classList.remove("dark");
-    }
-
-    fs.writeFile(themeFile, isDark ? "1" : "0");
+const themeSwitch = InputSwitch({
+    label: "Dark",
 });
+
+let dark = !!parseInt(await loadTheme());
+
+themeSwitch.input.checked = dark;
+setDark(dark);
+document.querySelector("header").append(themeSwitch.container);
+
+themeSwitch.input.onchange = () => {
+    dark = !dark;
+    setDark(dark);
+    fs.writeFile(themeFile, dark ? "1" : "0");
+};
