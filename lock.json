@@ -12,6 +12,36 @@
             ]
         },
         {
+            "name": "@types/react",
+            "version": "19.1.0",
+            "as": [
+                "^19.1.0"
+            ],
+            "location": [
+                "node_modules"
+            ]
+        },
+        {
+            "name": "@types/react-dom",
+            "version": "19.1.1",
+            "as": [
+                "^19.1.1"
+            ],
+            "location": [
+                "node_modules"
+            ]
+        },
+        {
+            "name": "csstype",
+            "version": "3.1.3",
+            "as": [
+                "^3.0.2"
+            ],
+            "location": [
+                "node_modules"
+            ]
+        },
+        {
             "name": "react",
             "version": "19.0.0",
             "as": [
