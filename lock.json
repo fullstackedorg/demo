@@ -3,9 +3,10 @@
         {
             "name": "@fullstacked/ui",
             "version": "0.0.1",
-            "git": "commit",
+            "git": "default",
             "as": [
-                "github.com:fullstackedorg/ui#f1f2448ef5822ff7902617f747cadd1d7b6e362a"
+                "github.com:fullstackedorg/ui",
+                "github.com:fullstackedorg/ui#d322cb4fb7f572023e4c2031d2106f68bcacb6ea"
             ],
             "location": [
                 "node_modules"
@@ -13,9 +14,9 @@
         },
         {
             "name": "@types/react",
-            "version": "19.1.0",
+            "version": "19.2.2",
             "as": [
-                "^19.1.0"
+                "^19.2.2"
             ],
             "location": [
                 "node_modules"
@@ -23,9 +24,9 @@
         },
         {
             "name": "@types/react-dom",
-            "version": "19.1.1",
+            "version": "19.2.2",
             "as": [
-                "^19.1.1"
+                "^19.2.2"
             ],
             "location": [
                 "node_modules"
@@ -43,9 +44,9 @@
         },
         {
             "name": "react",
-            "version": "19.0.0",
+            "version": "19.2.0",
             "as": [
-                "^19.0.0"
+                "^19.2.0"
             ],
             "location": [
                 "node_modules"
@@ -53,9 +54,9 @@
         },
         {
             "name": "react-dom",
-            "version": "19.0.0",
+            "version": "19.2.0",
             "as": [
-                "^19.0.0"
+                "^19.2.0"
             ],
             "location": [
                 "node_modules"
@@ -63,9 +64,9 @@
         },
         {
             "name": "scheduler",
-            "version": "0.25.0",
+            "version": "0.27.0",
             "as": [
-                "^0.25.0"
+                "^0.27.0"
             ],
             "location": [
                 "node_modules"

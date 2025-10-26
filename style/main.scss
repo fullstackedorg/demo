@@ -90,10 +90,8 @@ p {
     padding-bottom: s.$small;
 }
 
-#theme-switch {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.input-switch {
+    width: auto;
 }
 
 #counter {

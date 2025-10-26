@@ -1,11 +1,11 @@
 {
     "dependencies": {
-        "@fullstacked/ui": "github.com:fullstackedorg/ui#f1f2448ef5822ff7902617f747cadd1d7b6e362a",
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0"
+        "@fullstacked/ui": "github.com:fullstackedorg/ui#d322cb4fb7f572023e4c2031d2106f68bcacb6ea",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0"
     },
     "devDependencies": {
-        "@types/react": "^19.1.0",
-        "@types/react-dom": "^19.1.1"
+        "@types/react": "^19.2.2",
+        "@types/react-dom": "^19.2.2"
     }
 }
