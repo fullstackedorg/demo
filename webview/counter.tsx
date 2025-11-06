@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import fs from "fs";
+import { counterClass } from "./counter.s";
 
 const countFile = "data/count.txt";
 await fs.mkdir("data");
@@ -42,7 +43,7 @@ function Counter() {
     };
 
     return (
-        <>
+        <div className={counterClass}>
             <div>
                 <button className="icon-large" onClick={decr}>
                     <Icon iconName={"minus"} />
@@ -57,7 +58,7 @@ function Counter() {
             <button className="icon-large" onClick={reset}>
                 <Icon iconName={"reset"} />
             </button>
-        </>
+        </div>
     );
 }
 
