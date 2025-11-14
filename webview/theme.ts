@@ -1,5 +1,5 @@
-import { InputSwitch } from "@fullstacked/ui";
 import fs from "fs";
+import { InputSwitch } from "@fullstacked/ui";
 
 const lightClassName = "light";
 
@@ -25,7 +25,7 @@ function setDark(dark: boolean) {
 }
 
 const themeSwitch = InputSwitch({
-    label: "Dark",
+    label: "Dark"
 });
 
 let dark = !!parseInt(await loadTheme());
