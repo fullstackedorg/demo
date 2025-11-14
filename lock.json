@@ -5,8 +5,7 @@
             "version": "0.0.1",
             "git": "default",
             "as": [
-                "github.com:fullstackedorg/ui",
-                "github.com:fullstackedorg/ui#d322cb4fb7f572023e4c2031d2106f68bcacb6ea"
+                "github.com:fullstackedorg/ui#55b39ce1cfa842cbeee860314c29cbe4bab99957"
             ],
             "location": [
                 "node_modules"
