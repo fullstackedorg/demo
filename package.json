@@ -1,6 +1,6 @@
 {
     "dependencies": {
-        "@fullstacked/ui": "github.com:fullstackedorg/ui#d322cb4fb7f572023e4c2031d2106f68bcacb6ea",
+        "@fullstacked/ui": "github.com:fullstackedorg/ui#55b39ce1cfa842cbeee860314c29cbe4bab99957",
         "react": "^19.2.0",
         "react-dom": "^19.2.0"
     },

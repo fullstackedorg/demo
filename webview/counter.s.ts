@@ -8,6 +8,6 @@ export const counterClass = style.createClass("counter", {
         display: "flex",
         alignItems: "center",
         gap: 20,
-        fontSize: 24,
-    },
+        fontSize: 24
+    }
 });

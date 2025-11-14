@@ -1,3 +1,4 @@
+import "./index.s";
 import "./webview/counter";
 import "./webview/icons";
 import "./webview/theme";
