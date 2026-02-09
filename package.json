@@ -1,10 +1,15 @@
 {
     "dependencies": {
-        "@fullstacked/ui": "github.com:fullstackedorg/ui#55b39ce1cfa842cbeee860314c29cbe4bab99957",
+        "csstype": "^3.2.3",
         "react": "^19.2.0",
         "react-dom": "^19.2.0"
     },
+    "scripts": {
+        "prestart": "node --experimental-strip-types ./style/index.ts"
+    },
+    "type": "module",
     "devDependencies": {
+        "@types/node": "^25.2.2",
         "@types/react": "^19.2.2",
         "@types/react-dom": "^19.2.2"
     }

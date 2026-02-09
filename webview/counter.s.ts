@@ -1,4 +1,4 @@
-import style from "style";
+import style from "../style.ts";
 
 export const counterClass = style.createClass("counter", {
     display: "flex",
