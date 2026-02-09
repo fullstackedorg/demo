@@ -1,5 +1,5 @@
-import type { CSSProperties } from "./style/types.ts";
-import style from "./style.ts";
+import type { CSSProperties } from "./style/types.ts"
+import style from "./style.ts"
 
 export const typography = {
     h1: 36,
@@ -8,10 +8,10 @@ export const typography = {
     m: 16,
     s: 12,
     xs: 9,
-};
+}
 
 export const fontFamily =
-    'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif';
+    'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif'
 
 const colors = {
     blue: {
@@ -29,7 +29,7 @@ const colors = {
         dark: "#404958",
     },
     overlay: "#15171b99",
-};
+}
 
 export function opacity(color: string, opacity: number) {
     return [
@@ -37,7 +37,7 @@ export function opacity(color: string, opacity: number) {
         parseInt(color.slice(3, 5), 16),
         parseInt(color.slice(5), 16),
         opacity / 100 + ")",
-    ].join(",");
+    ].join(",")
 }
 
 const spacing = {
@@ -45,17 +45,17 @@ const spacing = {
     s: 10,
     m: 20,
     l: 30,
-};
+}
 
-const bgDark = "#081233";
-const bgLight = "#9cd1ec";
+const bgDark = "#081233"
+const bgLight = "#9cd1ec"
 
 const backgroundColorDarkStyle: CSSProperties = {
     backgroundColor: bgDark
-};
+}
 const backgroundColorLightStyle: CSSProperties = {
     backgroundColor: bgLight
-};
+}
 
 const htmlBodyStyle: CSSProperties = {
     backgroundImage: `linear-gradient(${bgDark}, #1e293b)`,
@@ -69,7 +69,7 @@ const htmlBodyStyle: CSSProperties = {
     padding: 3,
     margin: 0,
     color: colors.light,
-};
+}
 
 const lightTheme: CSSProperties = {
     backgroundImage: `linear-gradient(to top, #fafbfb 0%, ${bgLight} 100%)`,
@@ -78,7 +78,7 @@ const lightTheme: CSSProperties = {
     "& label": {
         color: colors.dark
     }
-};
+}
 
 style.createGlobalStyle({
     "*": {
@@ -147,15 +147,15 @@ style.createGlobalStyle({
     p: {
         paddingBottom: spacing.s
     }
-});
+})
 
-export const buttonColors = ["red"] as const;
+export const buttonColors = ["red"] as const
 export const buttonStyles = [
     "default",
     "text",
     "icon-small",
     "icon-large",
-] as const;
+] as const
 
 const textIconStyle: CSSProperties = {
     backgroundColor: "transparent",
@@ -172,14 +172,14 @@ const textIconStyle: CSSProperties = {
     [`&.${buttonColors[0]}`]: {
         color: colors.red,
     },
-};
+}
 
 const iconStyle: CSSProperties = {
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
     padding: 0,
-};
+}
 
 style.createGlobalStyle({
     button: {
@@ -247,4 +247,4 @@ style.createGlobalStyle({
             },
         },
     },
-});
+})

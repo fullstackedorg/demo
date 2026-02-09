@@ -1,9 +1,9 @@
-import "./style.css";
+import "./style.css"
 import "fullstacked"
 
 import os from "os"
 
-document.title = "FullStacked Demo";
+document.title = "FullStacked Demo"
 
 document.body.innerHTML = `
 <style>
@@ -30,14 +30,12 @@ document.body.innerHTML = `
         <div id="counter"></div>
 
         <nav></nav>
-        `;
+        `
 
-import("./webview/counter");
-import("./webview/icons");
-import("./webview/theme");
-import("./webview/links");
-
-
+import("./webview/counter")
+import("./webview/icons")
+import("./webview/theme")
+import("./webview/links")
 
 document.querySelector<HTMLSpanElement>("#platform").innerText = os.platform();
 
