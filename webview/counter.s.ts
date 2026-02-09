@@ -1,4 +1,4 @@
-import style from "../style.ts";
+import style from "../style.ts"
 
 export const counterClass = style.createClass("counter", {
     display: "flex",
@@ -10,4 +10,4 @@ export const counterClass = style.createClass("counter", {
         gap: 20,
         fontSize: 24
     }
-});
+})
