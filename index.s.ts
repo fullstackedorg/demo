@@ -1,7 +1,7 @@
 import type { CSSProperties } from "./style/types.ts";
 import style from "./style.ts";
 
-export default {
+export const typography = {
     h1: 36,
     h2: 30,
     h3: 24,
@@ -31,6 +31,14 @@ const colors = {
     overlay: "#15171b99",
 };
 
+export function opacity(color: string, opacity: number) {
+    return [
+        "rgba(" + parseInt(color.slice(1, 3), 16),
+        parseInt(color.slice(3, 5), 16),
+        parseInt(color.slice(5), 16),
+        opacity / 100 + ")",
+    ].join(",");
+}
 
 const spacing = {
     xs: 5,
@@ -139,4 +147,104 @@ style.createGlobalStyle({
     p: {
         paddingBottom: spacing.s
     }
+});
+
+export const buttonColors = ["red"] as const;
+export const buttonStyles = [
+    "default",
+    "text",
+    "icon-small",
+    "icon-large",
+] as const;
+
+const textIconStyle: CSSProperties = {
+    backgroundColor: "transparent",
+    color: colors.blue.main,
+
+    "&:active": {
+        backgroundColor: colors.gray.dark,
+    },
+
+    "&:disabled": {
+        color: colors.gray.main,
+        backgroundColor: "transparent",
+    },
+    [`&.${buttonColors[0]}`]: {
+        color: colors.red,
+    },
+};
+
+const iconStyle: CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 0,
+};
+
+style.createGlobalStyle({
+    button: {
+        fontWeight: "bold",
+        fontSize: typography.m,
+        fontFamily,
+
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: spacing.xs,
+
+        padding: `7px ${spacing.s}px`,
+        borderRadius: spacing.xs,
+        backgroundColor: colors.blue.main,
+        color: colors.light,
+        border: 0,
+
+        cursor: "pointer",
+
+        ".icon": {
+            height: 20,
+            width: 20,
+        },
+
+        "&:active": {
+            backgroundColor: "#0055b3",
+        },
+
+        [`&.${buttonColors[0]}`]: {
+            backgroundColor: colors.red,
+
+            "&:active": {
+                backgroundColor: "#DB0C00",
+            },
+        },
+
+        "&:disabled": {
+            backgroundColor: colors.gray.main,
+            color: opacity(colors.light, 70),
+            cursor: "default",
+        },
+
+        [`&.${buttonStyles[1]}`]: textIconStyle,
+        [`&.${buttonStyles[2]}`]: {
+            ...textIconStyle,
+            ...iconStyle,
+            height: 24,
+            width: 24,
+
+            ".icon": {
+                height: 20,
+                width: 20,
+            },
+        },
+        [`&.${buttonStyles[3]}`]: {
+            ...textIconStyle,
+            ...iconStyle,
+            height: 38,
+            width: 38,
+
+            ".icon": {
+                height: 30,
+                width: 30,
+            },
+        },
+    },
 });
