@@ -38,5 +38,3 @@ import("./webview/theme")
 import("./webview/links")
 
 document.querySelector<HTMLSpanElement>("#platform").innerText = os.platform();
-
-
