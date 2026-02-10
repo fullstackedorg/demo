@@ -6,7 +6,7 @@
     },
     "scripts": {
         "prestart": "node --experimental-strip-types ./style/index.ts",
-        "start": "npx fullstacked"
+        "start": "fullstacked"
     },
     "type": "module",
     "devDependencies": {
