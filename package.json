@@ -1,17 +1,19 @@
 {
-    "dependencies": {
-        "csstype": "^3.2.3",
-        "react": "^19.2.0",
-        "react-dom": "^19.2.0"
-    },
     "scripts": {
-        "prestart": "node --experimental-strip-types ./style/index.ts",
+        "prestart": "tailwindcss -i ./index.css -o ./_index.tsx.tailwind.css",
         "start": "fullstacked"
     },
-    "type": "module",
-    "devDependencies": {
-        "@types/node": "^25.2.2",
-        "@types/react": "^19.2.2",
-        "@types/react-dom": "^19.2.2"
+    "dependencies": {
+        "@react-three/drei": "^10.7.7",
+        "@react-three/fiber": "^9.5.0",
+        "@tailwindcss/cli": "^4.2.0",
+        "@types/node": "^25.3.0",
+        "@types/react": "^19.2.14",
+        "@types/react-dom": "^19.2.3",
+        "@types/three": "^0.183.1",
+        "react": "^19.2.4",
+        "react-dom": "^19.2.4",
+        "tailwindcss": "^4.2.0",
+        "three": "^0.183.1"
     }
 }
