@@ -66,51 +66,54 @@ export default function App() {
                 <Header theme={theme} toggleTheme={toggleTheme} />
             </div>
             <div className="w-full flex-1 flex flex-col justify-center relative z-10 my-auto pointer-events-none">
-                <main className="flex flex-col lg:flex-row items-center justify-center w-full max-w-7xl mx-auto px-4 sm:px-8 gap-8 lg:gap-16 flex-1 py-4 pointer-events-auto">
-                    <div className="w-full lg:w-1/2 flex justify-center lg:justify-end xl:pr-8">
+                <main className="grid grid-cols-1 lg:grid-cols-2 items-center w-full max-w-7xl mx-auto px-4 sm:px-8 gap-8 lg:gap-x-16 lg:gap-y-12 flex-1 py-12 lg:py-4 pointer-events-auto">
+                    <div className="w-full flex justify-center lg:justify-end xl:pr-8 order-1 lg:order-1">
                         <Hero theme={theme} />
                     </div>
-                    <div className="w-full lg:w-1/2 flex justify-center lg:justify-start xl:pl-8">
+
+                    {/* Counter Area */}
+                    <div className="w-full flex justify-center lg:justify-start xl:pl-8 order-3 lg:order-2">
                         <Counter theme={theme} count={count} setCount={setCount} platform={platform} />
+                    </div>
+
+                    {/* Button and Checkbox Area */}
+                    <div className="flex flex-col items-center gap-4 mt-2 lg:mt-6 order-2 lg:order-3 lg:col-span-2 w-full">
+                        <div className="relative group/btn">
+                            <div className={`absolute -inset-0.5 rounded-2xl blur opacity-40 group-hover/btn:opacity-100 transition duration-1000 group-hover/btn:duration-200 animate-tilt ${theme === 'dark' ? 'bg-gradient-to-r from-sky-400 to-indigo-500' : 'bg-gradient-to-r from-blue-500 to-indigo-500'}`}></div>
+                            <button
+                                className={`relative px-8 py-3 rounded-2xl font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden border hover:shadow-lg ${theme === 'dark' ? 'bg-slate-900 border-sky-400/50 text-white hover:bg-slate-800' : 'bg-blue-600 border-blue-500/50 text-white hover:bg-blue-500'}`}
+                                onClick={() => console.log("Open Terminal")}
+                            >
+                                <svg className={`w-6 h-6 shrink-0 transition-transform duration-300 group-hover/btn:scale-110 ${theme === 'dark' ? 'text-sky-400' : 'text-white'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span className="shrink-0 whitespace-nowrap">Open Terminal</span>
+                            </button>
+                        </div>
+
+                        <div
+                            className="flex items-center gap-3 cursor-pointer group mt-1"
+                            onClick={() => setDontShowAgain(!dontShowAgain)}
+                        >
+                            <div className={`relative w-5 h-5 rounded-md border-2 transition-all duration-300 flex items-center justify-center
+                                ${dontShowAgain
+                                    ? (theme === 'dark' ? 'bg-sky-500 border-sky-500' : 'bg-blue-600 border-blue-600')
+                                    : (theme === 'dark' ? 'bg-transparent border-slate-600 group-hover:border-sky-400' : 'bg-transparent border-slate-400 group-hover:border-blue-500')
+                                }`}
+                            >
+                                <svg className={`w-3.5 h-3.5 text-white transition-transform duration-300 ${dontShowAgain ? 'scale-100' : 'scale-0'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <span className={`text-sm sm:text-base select-none transition-colors duration-300 ${theme === 'dark' ? 'text-slate-400 group-hover:text-slate-200' : 'text-slate-500 group-hover:text-slate-800'}`}>
+                                Don't show this demo again
+                            </span>
+                        </div>
                     </div>
                 </main>
             </div>
 
             <div className="w-full relative z-10 flex flex-col items-center mt-auto shrink-0 pointer-events-auto">
-                <div className="flex flex-col items-center gap-4 mb-2">
-                    <div className="relative group/btn">
-                        <div className={`absolute -inset-0.5 rounded-2xl blur opacity-40 group-hover/btn:opacity-100 transition duration-1000 group-hover/btn:duration-200 animate-tilt ${theme === 'dark' ? 'bg-gradient-to-r from-sky-400 to-indigo-500' : 'bg-gradient-to-r from-blue-500 to-indigo-500'}`}></div>
-                        <button
-                            className={`relative px-8 py-3 rounded-2xl font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden border hover:shadow-lg ${theme === 'dark' ? 'bg-slate-900 border-sky-400/50 text-white hover:bg-slate-800' : 'bg-blue-600 border-blue-500/50 text-white hover:bg-blue-500'}`}
-                            onClick={() => console.log("Open Terminal")}
-                        >
-                            <svg className={`w-6 h-6 shrink-0 transition-transform duration-300 group-hover/btn:scale-110 ${theme === 'dark' ? 'text-sky-400' : 'text-white'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span className="shrink-0 whitespace-nowrap">Open Terminal</span>
-                        </button>
-                    </div>
-
-                    <div
-                        className="flex items-center gap-3 cursor-pointer group mt-1"
-                        onClick={() => setDontShowAgain(!dontShowAgain)}
-                    >
-                        <div className={`relative w-5 h-5 rounded-md border-2 transition-all duration-300 flex items-center justify-center
-                            ${dontShowAgain
-                                ? (theme === 'dark' ? 'bg-sky-500 border-sky-500' : 'bg-blue-600 border-blue-600')
-                                : (theme === 'dark' ? 'bg-transparent border-slate-600 group-hover:border-sky-400' : 'bg-transparent border-slate-400 group-hover:border-blue-500')
-                            }`}
-                        >
-                            <svg className={`w-3.5 h-3.5 text-white transition-transform duration-300 ${dontShowAgain ? 'scale-100' : 'scale-0'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                            </svg>
-                        </div>
-                        <span className={`text-sm sm:text-base select-none transition-colors duration-300 ${theme === 'dark' ? 'text-slate-400 group-hover:text-slate-200' : 'text-slate-500 group-hover:text-slate-800'}`}>
-                            Skip demo next time
-                        </span>
-                    </div>
-                </div>
-
                 <Footer theme={theme} />
             </div>
         </div>
