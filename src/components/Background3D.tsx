@@ -34,6 +34,7 @@ function Starfield({ theme, count }: Background3DProps) {
     const pointer = useRef(new THREE.Vector2(0, 0));
     const targetScale = useRef(1);
     const isInteracting = useRef(false);
+    const timeRef = useRef(0);
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
@@ -90,8 +91,10 @@ function Starfield({ theme, count }: Background3DProps) {
     useFrame((state, delta) => {
         if (!ref.current) return;
 
+        timeRef.current += delta;
+
         // Default subtle floating animation
-        ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+        ref.current.position.y = Math.sin(timeRef.current * 0.5) * 0.1;
 
         // Base passive rotation
         ref.current.rotation.x -= delta / 20;

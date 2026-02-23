@@ -6,7 +6,7 @@ type FooterProps = {
 
 export default function Footer({ theme }: FooterProps) {
     return (
-        <footer className="w-full z-10 mt-auto pt-8 pb-4 flex flex-wrap justify-center gap-5">
+        <footer className="w-full z-10 mt-auto pt-4 pb-0 flex flex-wrap justify-center gap-5">
             {[
                 { name: 'Documentation', color: 'blue', url: 'https://docs.fullstacked.org' },
                 { name: 'Roadmap', color: 'sky', url: 'https://fullstacked.notion.site/FullStacked-v1-21d47d89d19a80429cb2f85dcf71fdc9' },

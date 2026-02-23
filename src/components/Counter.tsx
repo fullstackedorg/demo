@@ -3,12 +3,21 @@ import React from 'react';
 type CounterProps = {
     theme: string;
     count: number;
+    platform: string;
     setCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export default function Counter({ theme, count, setCount }: CounterProps) {
+export default function Counter({ theme, count, platform, setCount }: CounterProps) {
     return (
-        <div className="flex-shrink-0 flex justify-center w-full mt-4 lg:mt-0">
+        <div className="flex-shrink-0 flex flex-col items-center justify-center w-full mt-4 lg:mt-0">
+
+            <div className={`mb-6 inline-block px-5 py-2.5 rounded-full border backdrop-blur-md shadow-sm transition-colors duration-500 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-slate-300' : 'bg-black/5 border-black/10 text-slate-700'} relative z-10`}>
+                <span className="text-sm sm:text-base align-middle mr-1">You are currently running FullStacked on</span>
+                <kbd className={`inline-block px-2.5 py-1 -my-1 align-middle rounded-lg text-sm font-mono font-medium shadow-sm transition-colors duration-500 border ${theme === 'dark' ? 'bg-slate-800/80 text-sky-400 border-white/10' : 'bg-white/80 text-sky-600 border-black/5'}`}>
+                    {platform}
+                </kbd>
+            </div>
+
             <div className={`p-8 rounded-[2rem] backdrop-blur-xl border flex flex-col items-center gap-6 transition-all duration-500 w-80 relative group
          ${theme === 'dark' ? 'bg-slate-900/40 border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.4)] hover:border-sky-500/40 hover:bg-slate-900/60 hover:shadow-[0_8px_40px_rgba(14,165,233,0.15)]' : 'bg-white/60 border-white hover:border-sky-200 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:bg-white/80'}
          `}>
