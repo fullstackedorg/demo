@@ -14,7 +14,7 @@ export default function Hero({ theme }: HeroProps) {
                 </div>
             </div>
 
-            <h1 className="w-full text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 drop-shadow-sm pb-1 leading-tight">
+            <h1 className="w-full text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-fs-blue-400 via-fs-blue-500 to-fs-blue-800 drop-shadow-sm pb-1 leading-tight">
                 Welcome to FullStacked
             </h1>
 

@@ -8,19 +8,22 @@ export default function Footer({ theme }: FooterProps) {
     return (
         <footer className="w-full z-10 mt-auto pt-4 pb-0 flex flex-wrap justify-center gap-5">
             {[
+                { name: 'Website', color: 'indigo', url: 'https://fullstacked.org' },
                 { name: 'Documentation', color: 'blue', url: 'https://docs.fullstacked.org' },
                 { name: 'Roadmap', color: 'sky', url: 'https://fullstacked.notion.site/FullStacked-v1-21d47d89d19a80429cb2f85dcf71fdc9' },
                 { name: 'GitHub', color: 'cyan', url: 'https://github.com/fullstackedorg/fullstacked' }
             ].map((link) => {
                 const darkClassMap: any = {
-                    'blue': 'bg-blue-600/10 text-blue-400 border-blue-500/20 hover:bg-blue-600/20 hover:border-blue-500/40 hover:text-blue-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]',
-                    'sky': 'bg-sky-600/10 text-sky-400 border-sky-500/20 hover:bg-sky-600/20 hover:border-sky-500/40 hover:text-sky-300 hover:shadow-[0_0_20px_rgba(14,165,233,0.15)]',
-                    'cyan': 'bg-cyan-600/10 text-cyan-400 border-cyan-500/20 hover:bg-cyan-600/20 hover:border-cyan-500/40 hover:text-cyan-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)]'
+                    'indigo': 'bg-fs-blue-800/10 text-fs-blue-400 border-fs-blue-600/20 hover:bg-fs-blue-800/20 hover:border-fs-blue-600/40 hover:text-fs-blue-300 hover:shadow-[0_0_20px_rgba(15,127,212,0.15)]',
+                    'blue': 'bg-fs-blue-600/10 text-fs-blue-400 border-fs-blue-500/20 hover:bg-fs-blue-600/20 hover:border-fs-blue-500/40 hover:text-fs-blue-300 hover:shadow-[0_0_20px_rgba(33,158,242,0.15)]',
+                    'sky': 'bg-fs-blue-500/10 text-fs-blue-400 border-fs-blue-400/20 hover:bg-fs-blue-500/20 hover:border-fs-blue-400/40 hover:text-fs-blue-300 hover:shadow-[0_0_20px_rgba(72,188,255,0.15)]',
+                    'cyan': 'bg-fs-blue-400/10 text-fs-blue-300 border-fs-blue-300/20 hover:bg-fs-blue-400/20 hover:border-fs-blue-300/40 hover:text-fs-blue-200 hover:shadow-[0_0_20px_rgba(142,210,255,0.15)]'
                 };
                 const lightClassMap: any = {
-                    'blue': 'bg-white text-blue-700 border-black/5 shadow-sm hover:bg-blue-50 hover:border-blue-200 hover:shadow-md hover:-translate-y-0.5',
-                    'sky': 'bg-white text-sky-700 border-black/5 shadow-sm hover:bg-sky-50 hover:border-sky-200 hover:shadow-md hover:-translate-y-0.5',
-                    'cyan': 'bg-white text-cyan-700 border-black/5 shadow-sm hover:bg-cyan-50 hover:border-cyan-200 hover:shadow-md hover:-translate-y-0.5'
+                    'indigo': 'bg-white text-fs-blue-900 border-black/5 shadow-sm hover:bg-fs-blue-50 hover:border-fs-blue-200 hover:shadow-md hover:-translate-y-0.5',
+                    'blue': 'bg-white text-fs-blue-800 border-black/5 shadow-sm hover:bg-fs-blue-50 hover:border-fs-blue-200 hover:shadow-md hover:-translate-y-0.5',
+                    'sky': 'bg-white text-fs-blue-700 border-black/5 shadow-sm hover:bg-fs-blue-50 hover:border-fs-blue-200 hover:shadow-md hover:-translate-y-0.5',
+                    'cyan': 'bg-white text-fs-blue-600 border-black/5 shadow-sm hover:bg-fs-blue-50 hover:border-fs-blue-200 hover:shadow-md hover:-translate-y-0.5'
                 };
 
                 return (

@@ -78,10 +78,10 @@ function Starfield({ theme, count }: Background3DProps) {
     }, []);
 
     const raycaster = new THREE.Raycaster();
-    const targetColor = useRef(new THREE.Color(theme === 'dark' ? '#38bdf8' : '#0ea5e9'));
+    const targetColor = useRef(new THREE.Color(theme === 'dark' ? '#48bcff' : '#003d96'));
 
     useEffect(() => {
-        const baseHue = 195; // Approximate hue of sky-500
+        const baseHue = 202; // Approximate hue of #48BCFF
         const hueShift = (baseHue + count * 45) % 360;
         // Light mode: make particles darker (lightness 0.15) so they contrast with slate-50 background a lot better
         // Dark mode: keep them relatively bright (lightness 0.55)

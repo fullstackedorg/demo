@@ -4,6 +4,17 @@
 @theme {
     --font-sans: 'Inter', system-ui, sans-serif;
     --animate-blob: blob 9s infinite;
+    --color-fs-blue-50: #eef8ff;
+    --color-fs-blue-100: #d9f0ff;
+    --color-fs-blue-200: #bce3ff;
+    --color-fs-blue-300: #8ed2ff;
+    --color-fs-blue-400: #48bcff;
+    --color-fs-blue-500: #219ef2;
+    --color-fs-blue-600: #0f7fd4;
+    --color-fs-blue-700: #0d65ac;
+    --color-fs-blue-800: #003d96;
+    --color-fs-blue-900: #0d4072;
+    --color-fs-blue-950: #08294d;
 }
 
 @keyframes blob {
