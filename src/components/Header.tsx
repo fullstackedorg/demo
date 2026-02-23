@@ -10,7 +10,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
         <header className="z-20 absolute top-2 right-2 md:top-6 md:right-6 lg:top-8 lg:right-8">
             <button
                 onClick={toggleTheme}
-                className={`relative w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 z-20 ${theme === 'dark' ? 'bg-slate-800/80 text-sky-400 hover:bg-slate-800 border border-white/10 shadow-lg' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 shadow-md'}`}
+                className={`cursor-pointer relative w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 z-20 ${theme === 'dark' ? 'bg-slate-800/80 text-sky-400 hover:bg-slate-800 border border-white/10 shadow-lg' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 shadow-md'}`}
                 aria-label="Toggle theme"
             >
                 {theme === 'dark' ? (

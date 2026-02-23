@@ -21,7 +21,7 @@ export default function Counter({ theme, count, platform, setCount }: CounterPro
                 <div className="flex items-center gap-8 relative z-10 w-full justify-center">
                     <button
                         onClick={() => setCount(c => c - 1)}
-                        className={`w-14 h-14 aspect-square flex items-center justify-center rounded-full text-3xl font-light transition-all hover:scale-110 active:scale-95 ${theme === 'dark' ? 'text-sky-400 bg-sky-500/10 hover:bg-sky-500/20' : 'text-sky-600 bg-sky-50 hover:bg-sky-100'}`}
+                        className={`cursor-pointer w-14 h-14 aspect-square flex items-center justify-center rounded-full text-3xl font-light transition-all hover:scale-110 active:scale-95 ${theme === 'dark' ? 'text-sky-400 bg-sky-500/10 hover:bg-sky-500/20' : 'text-sky-600 bg-sky-50 hover:bg-sky-100'}`}
                         aria-label="Decrease"
                     >
                         -
@@ -31,7 +31,7 @@ export default function Counter({ theme, count, platform, setCount }: CounterPro
                     </div>
                     <button
                         onClick={() => setCount(c => c + 1)}
-                        className={`w-14 h-14 aspect-square flex items-center justify-center rounded-full text-3xl font-light transition-all hover:scale-110 active:scale-95 ${theme === 'dark' ? 'text-sky-400 bg-sky-500/10 hover:bg-sky-500/20' : 'text-sky-600 bg-sky-50 hover:bg-sky-100'}`}
+                        className={`cursor-pointer w-14 h-14 aspect-square flex items-center justify-center rounded-full text-3xl font-light transition-all hover:scale-110 active:scale-95 ${theme === 'dark' ? 'text-sky-400 bg-sky-500/10 hover:bg-sky-500/20' : 'text-sky-600 bg-sky-50 hover:bg-sky-100'}`}
                         aria-label="Increase"
                     >
                         +
@@ -40,7 +40,7 @@ export default function Counter({ theme, count, platform, setCount }: CounterPro
 
                 <button
                     onClick={() => setCount(0)}
-                    className={`p-2 rounded-full transition-all hover:-rotate-180 duration-500 relative z-10 flex items-center justify-center gap-2 text-sm font-medium
+                    className={`cursor-pointer p-2 rounded-full transition-all hover:-rotate-180 duration-500 relative z-10 flex items-center justify-center gap-2 text-sm font-medium
             ${theme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
                     title="Reset counter"
                 >
