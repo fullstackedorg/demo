@@ -205,8 +205,15 @@ export default function Background3D({ theme, count }: Background3DProps) {
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
             <Canvas
                 camera={{ position: [0, 0, 2], fov: 60 }}
-                gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
+                gl={{
+                    alpha: true,
+                    antialias: false,
+                    powerPreference: "high-performance",
+                }}
                 dpr={[1, 1.5]}
+                onCreated={({ gl }) => {
+                    gl.setClearColor(0x000000, 0);
+                }}
             >
                 <Starfield theme={theme} count={count} />
             </Canvas>

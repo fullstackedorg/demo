@@ -8,7 +8,7 @@ import Counter from "./components/Counter";
 import Footer from "./components/Footer";
 import Background3D from "./components/Background3D";
 
-export default function App() {
+export default function App(props: { openTerminal?: (dontShowAgain: boolean) => void }) {
     const [theme, setTheme] = useState(() => {
         if (typeof window !== 'undefined' && window.matchMedia) {
             return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -77,12 +77,12 @@ export default function App() {
                     </div>
 
                     {/* Button and Checkbox Area */}
-                    <div className="flex flex-col items-center gap-4 order-2 lg:order-3 lg:col-span-2 w-full">
+                    {props.openTerminal && <div className="flex flex-col items-center gap-4 order-2 lg:order-3 lg:col-span-2 w-full">
                         <div className="relative group/btn">
                             <div className={`absolute -inset-0.5 rounded-2xl blur opacity-40 group-hover/btn:opacity-100 transition duration-1000 group-hover/btn:duration-200 animate-tilt ${theme === 'dark' ? 'bg-gradient-to-r from-fs-blue-400 to-fs-blue-700' : 'bg-gradient-to-r from-fs-blue-500 to-fs-blue-800'}`}></div>
                             <button
                                 className={`cursor-pointer relative px-8 py-3 rounded-2xl font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden border hover:shadow-lg ${theme === 'dark' ? 'bg-slate-900 border-fs-blue-400/50 text-white hover:bg-slate-800' : 'bg-fs-blue-600 border-fs-blue-500/50 text-white hover:bg-fs-blue-500'}`}
-                                onClick={() => console.log("Open Terminal")}
+                                onClick={() => props.openTerminal(dontShowAgain)}
                             >
                                 <svg className={`w-6 h-6 shrink-0 transition-transform duration-300 group-hover/btn:scale-110 ${theme === 'dark' ? 'text-fs-blue-400' : 'text-white'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -109,7 +109,8 @@ export default function App() {
                                 Skip welcome on startup
                             </span>
                         </div>
-                    </div>
+                    </div>}
+
                 </main>
             </div>
 
