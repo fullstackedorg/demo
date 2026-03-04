@@ -1,4 +1,5 @@
 import React from 'react';
+import appIcon from "../app-icon.png";
 
 type HeroProps = {
     theme: string;
@@ -10,7 +11,7 @@ export default function Hero({ theme }: HeroProps) {
             {/* Logo / Icon */}
             <div className="relative mb-6 lg:mb-8 group cursor-default">
                 <div className="relative w-24 h-24 lg:w-32 lg:h-32 flex items-center justify-center transform group-hover:scale-[1.03] transition duration-500 rounded-[2rem]">
-                    <img src={"src/app-icon.png"} alt="FullStacked Logo" className="w-full h-full object-cover" />
+                    <img src={appIcon} alt="FullStacked Logo" className="w-full h-full object-cover" />
                 </div>
             </div>
 
