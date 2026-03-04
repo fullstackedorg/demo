@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Points, PointMaterial } from '@react-three/drei';
-import * as THREE from 'three';
+import React, { useRef, useState, useEffect } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Points, PointMaterial } from "@react-three/drei";
+import * as THREE from "three";
 
 type Background3DProps = {
     theme: string;
@@ -43,8 +43,10 @@ function Starfield({ theme, count }: Background3DProps) {
         };
         const handleTouchMove = (e: TouchEvent) => {
             if (e.touches.length > 0) {
-                pointer.current.x = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
-                pointer.current.y = -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
+                pointer.current.x =
+                    (e.touches[0].clientX / window.innerWidth) * 2 - 1;
+                pointer.current.y =
+                    -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
             }
         };
 
@@ -58,34 +60,44 @@ function Starfield({ theme, count }: Background3DProps) {
             isInteracting.current = false;
         };
 
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('touchmove', handleTouchMove, { passive: true });
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("touchmove", handleTouchMove, {
+            passive: true
+        });
 
         // Use mousedown/touchstart for continuous repulsion while held
-        window.addEventListener('mousedown', handleInteractionStart);
-        window.addEventListener('touchstart', handleInteractionStart, { passive: true });
-        window.addEventListener('mouseup', handleInteractionEnd);
-        window.addEventListener('touchend', handleInteractionEnd);
+        window.addEventListener("mousedown", handleInteractionStart);
+        window.addEventListener("touchstart", handleInteractionStart, {
+            passive: true
+        });
+        window.addEventListener("mouseup", handleInteractionEnd);
+        window.addEventListener("touchend", handleInteractionEnd);
 
         return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('touchmove', handleTouchMove);
-            window.removeEventListener('mousedown', handleInteractionStart);
-            window.removeEventListener('touchstart', handleInteractionStart);
-            window.removeEventListener('mouseup', handleInteractionEnd);
-            window.removeEventListener('touchend', handleInteractionEnd);
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("touchmove", handleTouchMove);
+            window.removeEventListener("mousedown", handleInteractionStart);
+            window.removeEventListener("touchstart", handleInteractionStart);
+            window.removeEventListener("mouseup", handleInteractionEnd);
+            window.removeEventListener("touchend", handleInteractionEnd);
         };
     }, []);
 
     const raycaster = new THREE.Raycaster();
-    const targetColor = useRef(new THREE.Color(theme === 'dark' ? '#48bcff' : '#003d96'));
+    const targetColor = useRef(
+        new THREE.Color(theme === "dark" ? "#48bcff" : "#003d96")
+    );
 
     useEffect(() => {
         const baseHue = 202; // Approximate hue of #48BCFF
         const hueShift = (baseHue + count * 45) % 360;
         // Light mode: make particles darker (lightness 0.15) so they contrast with slate-50 background a lot better
         // Dark mode: keep them relatively bright (lightness 0.55)
-        targetColor.current.setHSL(hueShift / 360, theme === 'dark' ? 0.9 : 0.8, theme === 'dark' ? 0.55 : 0.15);
+        targetColor.current.setHSL(
+            hueShift / 360,
+            theme === "dark" ? 0.9 : 0.8,
+            theme === "dark" ? 0.55 : 0.15
+        );
     }, [count, theme]);
 
     useFrame((state, delta) => {
@@ -108,10 +120,18 @@ function Starfield({ theme, count }: Background3DProps) {
         ref.current.rotation.y += 0.05 * (targetY - ref.current.rotation.y);
 
         // Scale interaction effect
-        ref.current.scale.lerp(new THREE.Vector3(targetScale.current, targetScale.current, targetScale.current), 0.1);
+        ref.current.scale.lerp(
+            new THREE.Vector3(
+                targetScale.current,
+                targetScale.current,
+                targetScale.current
+            ),
+            0.1
+        );
 
         // Particle repulsion physics
-        const positions = ref.current.geometry.attributes.position.array as Float32Array;
+        const positions = ref.current.geometry.attributes.position
+            .array as Float32Array;
 
         // Raycast to find pointer plane intersection
         raycaster.setFromCamera(pointer.current, state.camera);
@@ -157,7 +177,9 @@ function Starfield({ theme, count }: Background3DProps) {
 
                 if (distanceSq < repulsionRadius * repulsionRadius) {
                     const distance = Math.sqrt(distanceSq);
-                    const force = (repulsionRadius - distance) / repulsionRadius * repulsionForce;
+                    const force =
+                        ((repulsionRadius - distance) / repulsionRadius) *
+                        repulsionForce;
 
                     // Add velocity pushing away from cursor
                     velocities.current[ix] += (dx / distance) * force * delta;
@@ -186,14 +208,19 @@ function Starfield({ theme, count }: Background3DProps) {
 
     return (
         <group rotation={[0, 0, Math.PI / 4]}>
-            <Points ref={ref} positions={sphere} stride={3} frustumCulled={false}>
+            <Points
+                ref={ref}
+                positions={sphere}
+                stride={3}
+                frustumCulled={false}
+            >
                 <PointMaterial
                     ref={materialRef}
                     transparent
                     size={0.015}
                     sizeAttenuation={true}
                     depthWrite={false}
-                    opacity={theme === 'dark' ? 0.25 : 1.0}
+                    opacity={theme === "dark" ? 0.25 : 1.0}
                 />
             </Points>
         </group>
@@ -208,7 +235,7 @@ export default function Background3D({ theme, count }: Background3DProps) {
                 gl={{
                     alpha: true,
                     antialias: false,
-                    powerPreference: "high-performance",
+                    powerPreference: "high-performance"
                 }}
                 dpr={[1, 1.5]}
                 onCreated={({ gl }) => {
