@@ -1,6 +1,5 @@
 {
     "scripts": {
-        "prestart": "tailwindcss -i ./index.css -o ./_index.tsx.tailwind.css",
         "start": "fullstacked"
     },
     "dependencies": {
