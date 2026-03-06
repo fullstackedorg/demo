@@ -7,6 +7,7 @@ import Hero from "./components/Hero";
 import Counter from "./components/Counter";
 import Footer from "./components/Footer";
 import Background3D from "./components/Background3D";
+import Switch from "./components/Switch";
 
 export default function App(props: {
     openTerminal?: (dontShowAgain: boolean) => void;
@@ -31,8 +32,6 @@ export default function App(props: {
                 const parsed = JSON.parse(data);
                 if (parsed.theme) setTheme(parsed.theme);
                 if (typeof parsed.count === "number") setCount(parsed.count);
-                if (typeof parsed.dontShowAgain === "boolean")
-                    setDontShowAgain(parsed.dontShowAgain);
             })
             .catch(() => {
                 // Ignore errors if file doesn't exist or is invalid
@@ -46,9 +45,9 @@ export default function App(props: {
         if (!isLoaded) return;
         fs.writeFile(
             "data.json",
-            JSON.stringify({ theme, count, dontShowAgain }, null, 2)
+            JSON.stringify({ theme, count }, null, 2)
         ).catch((err) => console.error("Error saving data:", err));
-    }, [theme, count, dontShowAgain, isLoaded]);
+    }, [theme, count, isLoaded]);
 
     useEffect(() => {
         // Match the HTML background color to the main container's background color
@@ -123,41 +122,19 @@ export default function App(props: {
                                 </button>
                             </div>
 
-                            <div
-                                className="flex items-center gap-3 cursor-pointer group mt-1"
-                                onClick={() => setDontShowAgain(!dontShowAgain)}
-                            >
-                                <div
-                                    className={`relative w-5 h-5 rounded-md border-2 transition-all duration-300 flex items-center justify-center
-                                ${
-                                    dontShowAgain
-                                        ? theme === "dark"
-                                            ? "bg-fs-blue-500 border-fs-blue-500"
-                                            : "bg-fs-blue-600 border-fs-blue-600"
-                                        : theme === "dark"
-                                          ? "bg-transparent border-slate-600 group-hover:border-fs-blue-400"
-                                          : "bg-transparent border-slate-400 group-hover:border-fs-blue-500"
-                                }`}
-                                >
-                                    <svg
-                                        className={`w-3.5 h-3.5 text-white transition-transform duration-300 ${dontShowAgain ? "scale-100" : "scale-0"}`}
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={3}
-                                            d="M5 13l4 4L19 7"
-                                        />
-                                    </svg>
-                                </div>
+                            <div className="flex flex-col items-center gap-2">
                                 <span
-                                    className={`text-sm sm:text-base select-none transition-colors duration-300 ${theme === "dark" ? "text-slate-400 group-hover:text-slate-200" : "text-slate-500 group-hover:text-slate-800"}`}
+                                    className={`text-xs font-semibold uppercase tracking-wider transition-colors duration-300 ${theme === "dark" ? "text-white" : "text-slate-900"}`}
                                 >
-                                    Skip welcome on startup
+                                    Skip welcome message
                                 </span>
+                                <Switch
+                                    theme={theme}
+                                    checked={dontShowAgain}
+                                    onChange={setDontShowAgain}
+                                    leftLabel="Until Tomorrow"
+                                    rightLabel="Forever"
+                                />
                             </div>
                         </div>
                     )}
