@@ -27,7 +27,7 @@ export default function App(props: {
     const platform = os.platform();
 
     useEffect(() => {
-        fs.readFile("data.json", "utf-8")
+        fs.readFile("user_data/demo.json", "utf-8")
             .then((data) => {
                 const parsed = JSON.parse(data);
                 if (parsed.theme) setTheme(parsed.theme);
@@ -43,10 +43,14 @@ export default function App(props: {
 
     useEffect(() => {
         if (!isLoaded) return;
-        fs.writeFile(
-            "data.json",
-            JSON.stringify({ theme, count }, null, 2)
-        ).catch((err) => console.error("Error saving data:", err));
+        fs.mkdir("user_data", { recursive: true })
+            .then(() => {
+                return fs.writeFile(
+                    "user_data/demo.json",
+                    JSON.stringify({ theme, count }, null, 2)
+                );
+            })
+            .catch((err) => console.error("Error saving data:", err));
     }, [theme, count, isLoaded]);
 
     useEffect(() => {
