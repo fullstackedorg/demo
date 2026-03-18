@@ -68,8 +68,12 @@ export default function Background3D({ theme, count }: Background3DProps) {
     // Refs let the render loop read the latest props without restarting
     const themeRef = useRef(theme);
     const countRef = useRef(count);
-    useEffect(() => { themeRef.current = theme; }, [theme]);
-    useEffect(() => { countRef.current = count; }, [count]);
+    useEffect(() => {
+        themeRef.current = theme;
+    }, [theme]);
+    useEffect(() => {
+        countRef.current = count;
+    }, [count]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -80,14 +84,14 @@ export default function Background3D({ theme, count }: Background3DProps) {
             canvas,
             alpha: true,
             antialias: false,
-            powerPreference: "high-performance",
+            powerPreference: "high-performance"
         });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
         renderer.setClearColor(0x000000, 0);
 
         // ── Scene & Camera ───────────────────────────────────────────────────
-        const scene  = new THREE.Scene();
+        const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(
             60,
             canvas.clientWidth / canvas.clientHeight,
@@ -101,11 +105,12 @@ export default function Background3D({ theme, count }: Background3DProps) {
         {
             const radius = 1.5;
             for (let i = 0; i < PARTICLE_COUNT; i++) {
-                const r     = radius * Math.cbrt(Math.random());
+                const r = radius * Math.cbrt(Math.random());
                 const theta = Math.random() * 2 * Math.PI;
-                const phi   = Math.acos(2 * Math.random() - 1);
-                originalPositions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
-                originalPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+                const phi = Math.acos(2 * Math.random() - 1);
+                originalPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+                originalPositions[i * 3 + 1] =
+                    r * Math.sin(phi) * Math.sin(theta);
                 originalPositions[i * 3 + 2] = r * Math.cos(phi);
             }
         }
@@ -123,17 +128,17 @@ export default function Background3D({ theme, count }: Background3DProps) {
         );
 
         // ── Uniforms ─────────────────────────────────────────────────────────
-        const isDark       = () => themeRef.current === "dark";
+        const isDark = () => themeRef.current === "dark";
         const currentColor = new THREE.Color(isDark() ? "#48bcff" : "#003d96");
-        const targetColor  = currentColor.clone();
+        const targetColor = currentColor.clone();
 
         const uniforms = {
-            uTime:      { value: 0 },
-            uCursor:    { value: new THREE.Vector3(0, 0, 0) },
+            uTime: { value: 0 },
+            uCursor: { value: new THREE.Vector3(0, 0, 0) },
             uRepulsion: { value: 0 },
-            uColor:     { value: currentColor },
-            uOpacity:   { value: isDark() ? 0.25 : 1.0 },
-            uPointSize: { value: 6.0 },
+            uColor: { value: currentColor },
+            uOpacity: { value: isDark() ? 0.25 : 1.0 },
+            uPointSize: { value: 6.0 }
         };
 
         const material = new THREE.ShaderMaterial({
@@ -141,43 +146,51 @@ export default function Background3D({ theme, count }: Background3DProps) {
             fragmentShader,
             uniforms,
             transparent: true,
-            depthWrite:  false,
+            depthWrite: false
         });
 
-        const group  = new THREE.Group();
+        const group = new THREE.Group();
         group.rotation.z = Math.PI / 4;
         const points = new THREE.Points(geometry, material);
         group.add(points);
         scene.add(group);
 
         // ── Input state ──────────────────────────────────────────────────────
-        const pointer     = new THREE.Vector2(0, 0);
-        let   targetScale = 1;
-        let   interacting = false;
+        const pointer = new THREE.Vector2(0, 0);
+        let targetScale = 1;
+        let interacting = false;
 
         const onMouseMove = (e: MouseEvent) => {
-            pointer.x =  (e.clientX / window.innerWidth)  * 2 - 1;
+            pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
             pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
         };
         const onTouchMove = (e: TouchEvent) => {
             if (e.touches.length > 0) {
-                pointer.x =  (e.touches[0].clientX / window.innerWidth)  * 2 - 1;
-                pointer.y = -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
+                pointer.x = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
+                pointer.y =
+                    -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
             }
         };
-        const onStart = () => { targetScale = 1.05; interacting = true;  };
-        const onEnd   = () => { targetScale = 1.0;  interacting = false; };
+        const onStart = () => {
+            targetScale = 1.05;
+            interacting = true;
+        };
+        const onEnd = () => {
+            targetScale = 1.0;
+            interacting = false;
+        };
 
-        window.addEventListener("mousemove",  onMouseMove);
-        window.addEventListener("touchmove",  onTouchMove,  { passive: true });
-        window.addEventListener("mousedown",  onStart);
+        window.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("touchmove", onTouchMove, { passive: true });
+        window.addEventListener("mousedown", onStart);
         window.addEventListener("touchstart", onStart, { passive: true });
-        window.addEventListener("mouseup",    onEnd);
-        window.addEventListener("touchend",   onEnd);
+        window.addEventListener("mouseup", onEnd);
+        window.addEventListener("touchend", onEnd);
 
         // ── Resize ───────────────────────────────────────────────────────────
         const onResize = () => {
-            const w = canvas.clientWidth, h = canvas.clientHeight;
+            const w = canvas.clientWidth,
+                h = canvas.clientHeight;
             camera.aspect = w / h;
             camera.updateProjectionMatrix();
             renderer.setSize(w, h, false);
@@ -188,28 +201,32 @@ export default function Background3D({ theme, count }: Background3DProps) {
         // ── Render loop ──────────────────────────────────────────────────────
         // CPU work per frame: rotation lerp + ONE raycaster call + uniform writes.
         // All per-particle physics lives in the vertex shader.
-        const raycaster   = new THREE.Raycaster();
-        const plane       = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+        const raycaster = new THREE.Raycaster();
+        const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
         const worldCursor = new THREE.Vector3();
         const localCursor = new THREE.Vector3();
 
         let lastTime = performance.now();
-        let elapsed  = 0;
+        let elapsed = 0;
         let rafId: number;
 
         function animate() {
             rafId = requestAnimationFrame(animate);
 
-            const now   = performance.now();
+            const now = performance.now();
             const delta = Math.min((now - lastTime) / 1000, 0.1);
-            lastTime    = now;
-            elapsed    += delta;
+            lastTime = now;
+            elapsed += delta;
 
             // Color & opacity from current theme/count
             {
-                const dark     = isDark();
+                const dark = isDark();
                 const hueShift = (202 + countRef.current * 45) % 360;
-                targetColor.setHSL(hueShift / 360, dark ? 0.9 : 0.8, dark ? 0.55 : 0.40);
+                targetColor.setHSL(
+                    hueShift / 360,
+                    dark ? 0.9 : 0.8,
+                    dark ? 0.55 : 0.4
+                );
                 uniforms.uOpacity.value = dark ? 0.25 : 1.0;
             }
             uniforms.uColor.value.lerp(targetColor, 0.05);
@@ -217,8 +234,10 @@ export default function Background3D({ theme, count }: Background3DProps) {
             // Rotation: passive drift + mouse parallax
             points.rotation.x -= delta / 20;
             points.rotation.y -= delta / 30;
-            points.rotation.x += 0.05 * ((pointer.y * Math.PI) / 6 - points.rotation.x);
-            points.rotation.y += 0.05 * ((pointer.x * Math.PI) / 6 - points.rotation.y);
+            points.rotation.x +=
+                0.05 * ((pointer.y * Math.PI) / 6 - points.rotation.x);
+            points.rotation.y +=
+                0.05 * ((pointer.x * Math.PI) / 6 - points.rotation.y);
 
             // Floating position & scale
             points.position.y = Math.sin(elapsed * 0.5) * 0.1;
@@ -247,12 +266,12 @@ export default function Background3D({ theme, count }: Background3DProps) {
         return () => {
             cancelAnimationFrame(rafId);
             ro.disconnect();
-            window.removeEventListener("mousemove",  onMouseMove);
-            window.removeEventListener("touchmove",  onTouchMove);
-            window.removeEventListener("mousedown",  onStart);
+            window.removeEventListener("mousemove", onMouseMove);
+            window.removeEventListener("touchmove", onTouchMove);
+            window.removeEventListener("mousedown", onStart);
             window.removeEventListener("touchstart", onStart);
-            window.removeEventListener("mouseup",    onEnd);
-            window.removeEventListener("touchend",   onEnd);
+            window.removeEventListener("mouseup", onEnd);
+            window.removeEventListener("touchend", onEnd);
             geometry.dispose();
             material.dispose();
             renderer.dispose();
