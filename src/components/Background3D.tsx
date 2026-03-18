@@ -8,10 +8,64 @@ type Background3DProps = {
 
 const PARTICLE_COUNT = 3000;
 
+// ── Vertex shader ─────────────────────────────────────────────────────────────
+// Runs once per particle entirely on the GPU.
+// Receives the static original position as an attribute, applies:
+//   • floating Y animation
+//   • smooth radial repulsion field from the cursor (when interacting)
+// No per-particle CPU work; the "spring return" is implicit — the base position
+// is always originalPosition, so displacement fades as uRepulsion → 0.
+const vertexShader = /* glsl */ `
+attribute vec3 originalPosition;
+
+uniform float uTime;
+uniform vec3  uCursor;     // cursor world pos projected to z=0, in local space
+uniform float uRepulsion;  // 0..1 smoothed interaction factor
+uniform float uPointSize;  // base size in world-space units → scaled by projection
+
+void main() {
+    vec3 pos = originalPosition;
+
+    // Subtle floating animation
+    pos.y += sin(uTime * 0.5 + originalPosition.x * 3.0) * 0.1;
+
+    // Smooth radial repulsion field (entirely on GPU — no CPU particle loop)
+    vec3  delta  = pos - uCursor;
+    float dist   = length(delta);
+    float radius = 0.8;
+    if (dist < radius && dist > 0.001) {
+        float strength = 1.0 - dist / radius;
+        strength = strength * strength;         // ease-in for a snappy feel
+        pos += (delta / dist) * strength * 1.8 * uRepulsion;
+    }
+
+    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+
+    // Perspective-correct point size (mirrors THREE sizeAttenuation)
+    gl_PointSize = uPointSize * projectionMatrix[1][1] / -mvPosition.z;
+    gl_Position  = projectionMatrix * mvPosition;
+}
+`;
+
+// ── Fragment shader ───────────────────────────────────────────────────────────
+// Draws a soft circular disc using gl_PointCoord — no texture needed.
+const fragmentShader = /* glsl */ `
+uniform vec3  uColor;
+uniform float uOpacity;
+
+void main() {
+    float dist  = length(gl_PointCoord - vec2(0.5));
+    // Soft edge: fully opaque in centre, fades out toward radius 0.5
+    float alpha = 1.0 - smoothstep(0.25, 0.5, dist);
+    if (alpha < 0.001) discard;
+    gl_FragColor = vec4(uColor, alpha * uOpacity);
+}
+`;
+
 export default function Background3D({ theme, count }: Background3DProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    // Keep theme/count accessible inside the render loop without restarting it
+    // Refs let the render loop read the latest props without restarting
     const themeRef = useRef(theme);
     const countRef = useRef(count);
     useEffect(() => { themeRef.current = theme; }, [theme]);
@@ -33,7 +87,7 @@ export default function Background3D({ theme, count }: Background3DProps) {
         renderer.setClearColor(0x000000, 0);
 
         // ── Scene & Camera ───────────────────────────────────────────────────
-        const scene = new THREE.Scene();
+        const scene  = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(
             60,
             canvas.clientWidth / canvas.clientHeight,
@@ -42,67 +96,65 @@ export default function Background3D({ theme, count }: Background3DProps) {
         );
         camera.position.set(0, 0, 2);
 
-        // ── Particles ────────────────────────────────────────────────────────
+        // ── Static particle positions (uploaded to GPU once, never touched again) ──
         const originalPositions = new Float32Array(PARTICLE_COUNT * 3);
         {
             const radius = 1.5;
             for (let i = 0; i < PARTICLE_COUNT; i++) {
-                const r = radius * Math.cbrt(Math.random());
+                const r     = radius * Math.cbrt(Math.random());
                 const theta = Math.random() * 2 * Math.PI;
-                const phi = Math.acos(2 * Math.random() - 1);
+                const phi   = Math.acos(2 * Math.random() - 1);
                 originalPositions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
                 originalPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
                 originalPositions[i * 3 + 2] = r * Math.cos(phi);
             }
         }
 
-        const positions  = new Float32Array(originalPositions);
-        const velocities = new Float32Array(PARTICLE_COUNT * 3);
-
         const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-
-        // Circular disc sprite so particles render as round dots
-        const discCanvas = document.createElement("canvas");
-        discCanvas.width = discCanvas.height = 64;
-        const ctx = discCanvas.getContext("2d")!;
-        const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-        grad.addColorStop(0, "rgba(255,255,255,1)");
-        grad.addColorStop(0.5, "rgba(255,255,255,0.8)");
-        grad.addColorStop(1, "rgba(255,255,255,0)");
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, 64, 64);
-        const discTexture = new THREE.CanvasTexture(discCanvas);
-
-        const initialColor = new THREE.Color(
-            themeRef.current === "dark" ? "#48bcff" : "#003d96"
+        // `position` is required by Three.js internally for frustum culling etc.
+        geometry.setAttribute(
+            "position",
+            new THREE.BufferAttribute(new Float32Array(originalPositions), 3)
         );
-        const material = new THREE.PointsMaterial({
-            color: initialColor,
-            map: discTexture,
-            size: 0.02,
-            sizeAttenuation: true,
+        // `originalPosition` is our custom attribute read by the vertex shader
+        geometry.setAttribute(
+            "originalPosition",
+            new THREE.BufferAttribute(originalPositions, 3)
+        );
+
+        // ── Uniforms ─────────────────────────────────────────────────────────
+        const isDark       = () => themeRef.current === "dark";
+        const currentColor = new THREE.Color(isDark() ? "#48bcff" : "#003d96");
+        const targetColor  = currentColor.clone();
+
+        const uniforms = {
+            uTime:      { value: 0 },
+            uCursor:    { value: new THREE.Vector3(0, 0, 0) },
+            uRepulsion: { value: 0 },
+            uColor:     { value: currentColor },
+            uOpacity:   { value: isDark() ? 0.25 : 1.0 },
+            uPointSize: { value: 6.0 },
+        };
+
+        const material = new THREE.ShaderMaterial({
+            vertexShader,
+            fragmentShader,
+            uniforms,
             transparent: true,
-            depthWrite: false,
-            opacity: themeRef.current === "dark" ? 0.25 : 1.0,
-            alphaTest: 0.001,
+            depthWrite:  false,
         });
 
-        // Group mirrors the r3f <group rotation={[0,0,Math.PI/4]}>
-        const group = new THREE.Group();
+        const group  = new THREE.Group();
         group.rotation.z = Math.PI / 4;
         const points = new THREE.Points(geometry, material);
         group.add(points);
         scene.add(group);
 
-        // ── Interaction state ────────────────────────────────────────────────
-        const pointer       = new THREE.Vector2(0, 0);
-        let   targetScale   = 1;
-        let   isInteracting = false;
-        let   elapsed       = 0;
-        const targetColor   = initialColor.clone();
+        // ── Input state ──────────────────────────────────────────────────────
+        const pointer     = new THREE.Vector2(0, 0);
+        let   targetScale = 1;
+        let   interacting = false;
 
-        // ── Event listeners ──────────────────────────────────────────────────
         const onMouseMove = (e: MouseEvent) => {
             pointer.x =  (e.clientX / window.innerWidth)  * 2 - 1;
             pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -113,137 +165,78 @@ export default function Background3D({ theme, count }: Background3DProps) {
                 pointer.y = -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
             }
         };
-        const onInteractionStart = () => { targetScale = 1.05; isInteracting = true; };
-        const onInteractionEnd   = () => { targetScale = 1.0;  isInteracting = false; };
+        const onStart = () => { targetScale = 1.05; interacting = true;  };
+        const onEnd   = () => { targetScale = 1.0;  interacting = false; };
 
         window.addEventListener("mousemove",  onMouseMove);
         window.addEventListener("touchmove",  onTouchMove,  { passive: true });
-        window.addEventListener("mousedown",  onInteractionStart);
-        window.addEventListener("touchstart", onInteractionStart, { passive: true });
-        window.addEventListener("mouseup",    onInteractionEnd);
-        window.addEventListener("touchend",   onInteractionEnd);
+        window.addEventListener("mousedown",  onStart);
+        window.addEventListener("touchstart", onStart, { passive: true });
+        window.addEventListener("mouseup",    onEnd);
+        window.addEventListener("touchend",   onEnd);
 
-        // ── Resize handling ──────────────────────────────────────────────────
+        // ── Resize ───────────────────────────────────────────────────────────
         const onResize = () => {
-            const w = canvas.clientWidth;
-            const h = canvas.clientHeight;
+            const w = canvas.clientWidth, h = canvas.clientHeight;
             camera.aspect = w / h;
             camera.updateProjectionMatrix();
             renderer.setSize(w, h, false);
         };
-        const resizeObserver = new ResizeObserver(onResize);
-        resizeObserver.observe(canvas);
+        const ro = new ResizeObserver(onResize);
+        ro.observe(canvas);
 
         // ── Render loop ──────────────────────────────────────────────────────
-        const raycaster  = new THREE.Raycaster();
-        const plane      = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+        // CPU work per frame: rotation lerp + ONE raycaster call + uniform writes.
+        // All per-particle physics lives in the vertex shader.
+        const raycaster   = new THREE.Raycaster();
+        const plane       = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
         const worldCursor = new THREE.Vector3();
-        const scaleVec   = new THREE.Vector3();
+        const localCursor = new THREE.Vector3();
 
         let lastTime = performance.now();
+        let elapsed  = 0;
         let rafId: number;
-
-        const repulsionRadius  = 0.8;
-        const repulsionForce   = 2.0;
-        const springRestitution = 0.1;
-        const damping          = 0.9;
 
         function animate() {
             rafId = requestAnimationFrame(animate);
 
             const now   = performance.now();
-            const delta = Math.min((now - lastTime) / 1000, 0.1); // seconds, capped
+            const delta = Math.min((now - lastTime) / 1000, 0.1);
             lastTime    = now;
             elapsed    += delta;
 
-            // Update target color from current props
+            // Color & opacity from current theme/count
             {
-                const isDark  = themeRef.current === "dark";
-                const baseHue = 202;
-                const hueShift = (baseHue + countRef.current * 45) % 360;
-                targetColor.setHSL(
-                    hueShift / 360,
-                    isDark ? 0.9 : 0.8,
-                    isDark ? 0.55 : 0.40
-                );
-                material.opacity = isDark ? 0.25 : 1.0;
+                const dark     = isDark();
+                const hueShift = (202 + countRef.current * 45) % 360;
+                targetColor.setHSL(hueShift / 360, dark ? 0.9 : 0.8, dark ? 0.55 : 0.40);
+                uniforms.uOpacity.value = dark ? 0.25 : 1.0;
             }
+            uniforms.uColor.value.lerp(targetColor, 0.05);
 
-            // Lerp material color toward target
-            material.color.lerp(targetColor, 0.05);
-
-            // Floating Y animation
-            points.position.y = Math.sin(elapsed * 0.5) * 0.1;
-
-            // Base passive rotation
+            // Rotation: passive drift + mouse parallax
             points.rotation.x -= delta / 20;
             points.rotation.y -= delta / 30;
+            points.rotation.x += 0.05 * ((pointer.y * Math.PI) / 6 - points.rotation.x);
+            points.rotation.y += 0.05 * ((pointer.x * Math.PI) / 6 - points.rotation.y);
 
-            // Parallax rotation toward pointer
-            const targetRotX = (pointer.y * Math.PI) / 6;
-            const targetRotY = (pointer.x * Math.PI) / 6;
-            points.rotation.x += 0.05 * (targetRotX - points.rotation.x);
-            points.rotation.y += 0.05 * (targetRotY - points.rotation.y);
+            // Floating position & scale
+            points.position.y = Math.sin(elapsed * 0.5) * 0.1;
+            const ns = points.scale.x + 0.1 * (targetScale - points.scale.x);
+            points.scale.setScalar(ns);
 
-            // Scale lerp
-            const cs = points.scale.x;
-            const ns = cs + 0.1 * (targetScale - cs);
-            points.scale.set(ns, ns, ns);
-
-            // Raycast cursor into world space (plane at z=0)
+            // One raycaster call → cursor in particle local space → shader uniform
             raycaster.setFromCamera(pointer, camera);
             raycaster.ray.intersectPlane(plane, worldCursor);
+            localCursor.copy(worldCursor);
+            points.worldToLocal(localCursor);
+            uniforms.uCursor.value.copy(localCursor);
 
-            // Transform cursor into points local space for repulsion
-            scaleVec.copy(worldCursor);
-            points.worldToLocal(scaleVec);
-            const lcx = scaleVec.x;
-            const lcy = scaleVec.y;
-            const lcz = scaleVec.z;
+            // Smooth repulsion factor (lerp toward 0 or 1)
+            uniforms.uRepulsion.value +=
+                0.1 * ((interacting ? 1.0 : 0.0) - uniforms.uRepulsion.value);
 
-            const posAttr = geometry.attributes.position;
-            const pos     = posAttr.array as Float32Array;
-
-            for (let i = 0; i < PARTICLE_COUNT; i++) {
-                const ix = i * 3, iy = ix + 1, iz = ix + 2;
-
-                const x = pos[ix], y = pos[iy], z = pos[iz];
-                const ox = originalPositions[ix];
-                const oy = originalPositions[iy];
-                const oz = originalPositions[iz];
-
-                // Spring toward original position
-                velocities[ix] += (ox - x) * springRestitution;
-                velocities[iy] += (oy - y) * springRestitution;
-                velocities[iz] += (oz - z) * springRestitution;
-
-                // Repulsion from cursor
-                if (isInteracting) {
-                    const dx = x - lcx;
-                    const dy = y - lcy;
-                    const dz = z - lcz;
-                    const distSq = dx * dx + dy * dy + dz * dz;
-                    if (distSq < repulsionRadius * repulsionRadius) {
-                        const dist  = Math.sqrt(distSq);
-                        const force = ((repulsionRadius - dist) / repulsionRadius) * repulsionForce;
-                        velocities[ix] += (dx / dist) * force * delta;
-                        velocities[iy] += (dy / dist) * force * delta;
-                        velocities[iz] += (dz / dist) * force * delta;
-                    }
-                }
-
-                // Damping
-                velocities[ix] *= damping;
-                velocities[iy] *= damping;
-                velocities[iz] *= damping;
-
-                // Integrate
-                pos[ix] += velocities[ix];
-                pos[iy] += velocities[iy];
-                pos[iz] += velocities[iz];
-            }
-
-            posAttr.needsUpdate = true;
+            uniforms.uTime.value = elapsed;
 
             renderer.render(scene, camera);
         }
@@ -253,20 +246,18 @@ export default function Background3D({ theme, count }: Background3DProps) {
         // ── Cleanup ──────────────────────────────────────────────────────────
         return () => {
             cancelAnimationFrame(rafId);
-            resizeObserver.disconnect();
+            ro.disconnect();
             window.removeEventListener("mousemove",  onMouseMove);
             window.removeEventListener("touchmove",  onTouchMove);
-            window.removeEventListener("mousedown",  onInteractionStart);
-            window.removeEventListener("touchstart", onInteractionStart);
-            window.removeEventListener("mouseup",    onInteractionEnd);
-            window.removeEventListener("touchend",   onInteractionEnd);
+            window.removeEventListener("mousedown",  onStart);
+            window.removeEventListener("touchstart", onStart);
+            window.removeEventListener("mouseup",    onEnd);
+            window.removeEventListener("touchend",   onEnd);
             geometry.dispose();
             material.dispose();
-            discTexture.dispose();
             renderer.dispose();
         };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
-    // ↑ intentionally empty — theme/count are read via refs so the loop never restarts
 
     return (
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
