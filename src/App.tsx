@@ -70,9 +70,9 @@ export default function App(props: {
                 <div className="w-full h-full pointer-events-auto">
                     <Background3D theme={theme} count={count} />
                 </div>
-                <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-fs-blue-500/10 blur-[120px] rounded-full animate-blob"></div>
-                <div className="absolute top-[20%] right-[-10%] w-[50%] h-[50%] bg-fs-blue-400/10 blur-[120px] rounded-full animate-blob animation-delay-2000"></div>
-                <div className="absolute bottom-[-10%] left-[20%] w-[60%] h-[60%] bg-fs-blue-600/10 blur-[120px] rounded-full animate-blob animation-delay-4000"></div>
+                <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-fs-blue-500/10 blur-[64px] rounded-full animate-blob transform-gpu will-change-transform"></div>
+                <div className="absolute top-[20%] right-[-10%] w-[50%] h-[50%] bg-fs-blue-400/10 blur-[64px] rounded-full animate-blob animation-delay-2000 transform-gpu will-change-transform"></div>
+                <div className="absolute bottom-[-10%] left-[20%] w-[60%] h-[60%] bg-fs-blue-600/10 blur-[64px] rounded-full animate-blob animation-delay-4000 transform-gpu will-change-transform"></div>
             </div>
 
             <div className="w-full relative z-20 flex justify-center">

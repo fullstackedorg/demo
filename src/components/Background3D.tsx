@@ -209,8 +209,19 @@ export default function Background3D({ theme, count }: Background3DProps) {
         let lastTime = performance.now();
         let elapsed = 0;
         let rafId: number;
+        let isHidden = false;
+
+        const onVisibilityChange = () => {
+            isHidden = document.hidden;
+            if (!isHidden) {
+                lastTime = performance.now();
+                rafId = requestAnimationFrame(animate);
+            }
+        };
+        document.addEventListener("visibilitychange", onVisibilityChange);
 
         function animate() {
+            if (isHidden) return;
             rafId = requestAnimationFrame(animate);
 
             const now = performance.now();
@@ -272,6 +283,7 @@ export default function Background3D({ theme, count }: Background3DProps) {
             window.removeEventListener("touchstart", onStart);
             window.removeEventListener("mouseup", onEnd);
             window.removeEventListener("touchend", onEnd);
+            document.removeEventListener("visibilitychange", onVisibilityChange);
             geometry.dispose();
             material.dispose();
             renderer.dispose();
