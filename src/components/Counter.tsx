@@ -16,8 +16,8 @@ export default function Counter({
     return (
         <div className="flex-shrink-0 flex flex-col items-center justify-center w-full mt-4 lg:mt-0">
             <div
-                className={`p-8 rounded-[2rem] backdrop-blur-xl border flex flex-col items-center gap-6 transition-all duration-500 w-80 relative group
-         ${theme === "dark" ? "bg-slate-900/40 border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.4)] hover:border-fs-blue-500/40 hover:bg-slate-900/60 hover:shadow-[0_8px_40px_rgba(33,158,242,0.15)]" : "bg-white/60 border-white hover:border-fs-blue-200 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:bg-white/80"}
+                className={`p-8 rounded-[2rem] backdrop-blur-md border flex flex-col items-center gap-6 transition-all duration-500 w-80 relative group
+         ${theme === "dark" ? "bg-slate-900/60 border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.4)] hover:border-fs-blue-500/40 hover:bg-slate-900/70 hover:shadow-[0_8px_40px_rgba(33,158,242,0.15)]" : "bg-white/75 border-white hover:border-fs-blue-200 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:bg-white/85"}
          `}
             >
                 <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent opacity-0 group-hover:opacity-100 rounded-[2rem] transition-opacity duration-500 pointer-events-none"></div>
