@@ -1,0 +1,41 @@
+{
+    "version": 1,
+    "builtAt": "2026-11-09T00:00:00.000Z",
+    "directory": "demo",
+    "repository": "https://github.com/fullstackedorg/demo.git",
+    "commit": "sample",
+    "runtime": {
+        "version": "1.0.0",
+        "build": "1861",
+        "platform": "ios",
+        "arch": "arm64"
+    },
+    "git": {
+        "objects": 465,
+        "bytes": 2233819,
+        "downloaded": true,
+        "files": 15
+    },
+    "packages": {
+        "count": 8,
+        "downloaded": 8,
+        "bytes": 10282901
+    },
+    "bundle": {
+        "sourceFiles": 14,
+        "bytes": 1032602,
+        "outputs": [
+            { "name": "index.css.tailwind.css", "bytes": 21504 },
+            { "name": "index.html", "bytes": 308 },
+            { "name": "index.tsx.css", "bytes": 1763 },
+            { "name": "index.tsx.js", "bytes": 1009027 }
+        ]
+    },
+    "downloadedBytes": 12516720,
+    "seconds": {
+        "download": 1.4,
+        "install": 4.2,
+        "bundle": 1.2,
+        "total": 6.8
+    }
+}
