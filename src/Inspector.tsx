@@ -130,7 +130,7 @@ function Home(props: { go: (v: ViewId) => void; stats: Stats; online: boolean; d
         <div className={"absolute inset-0 flex flex-col " + (props.direction === "back" ? "pop-in" : "")}>
             <main className="scroll-area pt-safe pl-safe pr-safe min-h-0 flex-1 overflow-y-auto">
                 <div className="pb-content px-4">
-                    <div className="flex items-center gap-3.5 pt-12 pb-6">
+                    <div className="flex items-center gap-3.5 pt-4 pb-6">
                         <AppIcon className="h-[60px] w-[60px]" />
                         <div className="min-w-0">
                             <h1 className="truncate text-[34px] leading-tight font-bold tracking-[-0.02em]">
@@ -353,6 +353,22 @@ export function Inspector({ stats }: { stats: Stats }) {
             setView("home");
         }
     };
+
+    // Android's back button calls globalThis.back: a view goes back to the
+    // home screen, the home screen (or the wide layout, which has none)
+    // leaves the project
+    const latest = useRef({ view, wide });
+    latest.current = { view, wide };
+    useEffect(() => {
+        const host = globalThis as { back?: () => void };
+        host.back = () => {
+            if (!latest.current.wide && latest.current.view !== "home") back();
+            else process.exit(0);
+        };
+        return () => {
+            delete host.back;
+        };
+    }, []);
 
     if (!wide) {
         const View = view === "home" ? null : COMPONENTS[view];
